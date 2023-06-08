@@ -123,5 +123,7 @@ public class MainActivity extends AppCompatActivity {
         dummyList.add(item5);
         dummyList.add(item6);
         dummyList.add(item7);
+
+        adapter.notifyDataSetChanged();
     }
 }
