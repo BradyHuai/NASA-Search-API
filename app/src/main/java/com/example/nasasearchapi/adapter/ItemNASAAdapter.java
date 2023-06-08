@@ -38,6 +38,6 @@ public class ItemNASAAdapter extends ArrayAdapter<ItemNASA> {
         itemTitle.setText(itemNASA.getTitle());
 //        itemImage.setImageResource();
 
-        return super.getView(position, convertView, parent);
+        return convertView;
     }
 }
