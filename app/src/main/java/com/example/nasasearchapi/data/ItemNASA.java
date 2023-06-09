@@ -28,6 +28,19 @@ public class ItemNASA {
         this.title = title;
         this.description = description;
         this.dateCreated = dateCreated;
+        this.thumbLink = "NA";
+        this.nasaID = "NA";
+        this.thumbImage = null;
+    }
+
+    public ItemNASA(int id, String title, String description, String dateCreated, String thumbLink, String nasaID) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.dateCreated = dateCreated;
+        this.thumbLink = thumbLink;
+        this.nasaID = nasaID;
+        this.thumbImage = null;
     }
 
     public int getId() {
@@ -84,5 +97,18 @@ public class ItemNASA {
 
     public void setThumbImage(Bitmap thumbImage) {
         this.thumbImage = thumbImage;
+    }
+
+    @Override
+    public String toString() {
+        return "ItemNASA{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", dateCreated='" + dateCreated + '\'' +
+                ", thumbLink='" + thumbLink + '\'' +
+                ", nasaID='" + nasaID + '\'' +
+                ", thumbImage=" + thumbImage +
+                '}';
     }
 }

@@ -6,6 +6,9 @@ import static com.example.nasasearchapi.tools.Constants.SEARCH_ENDPOINT;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.example.nasasearchapi.data.ItemNASA;
+import com.example.nasasearchapi.eventListener.SearchResultListener;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,10 +18,20 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SearchRequestTask extends AsyncTask<String, Void, String> {
 
     private static final String TAG = SearchRequestTask.class.getSimpleName();
+
+    private List<SearchResultListener> listeners = new ArrayList<>();
+
+    public void addListener(SearchResultListener listener) {
+        this.listeners.add(listener);
+    }
+
+    private List<ItemNASA> dataset = new ArrayList<>();
 
     @Override
     protected String doInBackground(String... strings) {
@@ -70,37 +83,57 @@ public class SearchRequestTask extends AsyncTask<String, Void, String> {
                 JSONArray items = collection.getJSONArray("items");
 
                 for (int i = 0; i < items.length(); i++) {
-                    Log.d(TAG, "onPostExecute: guo =================================");
+//                    Log.d(TAG, "onPostExecute: guo =================================");
                     JSONObject item = items.getJSONObject(i);
-                    Log.d(TAG, "onPostExecute: guo " + item.toString());
+//                    Log.d(TAG, "onPostExecute: guo " + item.toString());
                     JSONArray data = item.getJSONArray("data");
+
+                    ItemNASA itemNASA = new ItemNASA();
 
                     for (int j = 0; j < data.length(); j++) {
                         JSONObject dataJ = data.getJSONObject(j);
 
-                        String title = dataJ.getString("title");
-                        String dateCreated = dataJ.getString("date_created");
-                        String description = dataJ.getString("description");
-
+                        String title = dataJ.optString("title", "NA");
+                        String dateCreated = dataJ.optString("date_created", "NA");
+                        String description = dataJ.optString("description", "NA");
                         String nasa_id = dataJ.getString("nasa_id");
-//                            new MediaAssetRequest().execute(nasa_id);
-
-                        Log.d(TAG, "onPostExecute: guo title=" + title + ", nasa_id=" + nasa_id);
+                        itemNASA.setTitle(title);
+                        itemNASA.setDateCreated(dateCreated);
+                        itemNASA.setDescription(description);
+                        itemNASA.setNasaID(nasa_id);
                     }
 
-                    JSONArray links = item.getJSONArray("links");
-                    if (links.length() > 0) {
+                    JSONArray links = item.optJSONArray("links");
+                    if (links != null && links.length() > 0) {
                         JSONObject temp = links.getJSONObject(0);
                         String thumb = temp.getString("href");
                         Log.d(TAG, "onPostExecute: guo thumb=" + thumb);
-                        String render = temp.getString("render"); // image
+                        String render = temp.optString("render", ""); // image
+                        itemNASA.setThumbLink(thumb);
 //                        new MainActivity.ImageThumbRequest().execute(thumb);
+
+//                        for (SearchResultListener listener: listeners) {
+//                            listener.onDataAdded("", null);
+//                        }
+                    } else {
+                        itemNASA.setThumbLink("NA");
                     }
+                    dataset.add(itemNASA);
+                }
+
+                Log.d(TAG, "onPostExecute: guo list=" + listeners.size());
+
+                for (SearchResultListener listener: listeners) {
+                    Log.d(TAG, "onPostExecute: guo on data returned");
+                    listener.onDataReturned(dataset);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
         }
+    }
+
+    public List<ItemNASA> getDataset() {
+        return dataset;
     }
 }
