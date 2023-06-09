@@ -84,48 +84,42 @@ public class SearchRequestTask extends AsyncTask<String, Void, String> {
                 JSONArray items = collection.getJSONArray("items");
 
                 for (int i = 0; i < items.length(); i++) {
-//                    Log.d(TAG, "onPostExecute: guo =================================");
-                    JSONObject item = items.getJSONObject(i);
-//                    Log.d(TAG, "onPostExecute: guo " + item.toString());
-                    JSONArray data = item.getJSONArray("data");
-
                     ItemNASA itemNASA = new ItemNASA();
 
-                    for (int j = 0; j < data.length(); j++) {
-                        JSONObject dataJ = data.getJSONObject(j);
+                    JSONObject item = items.getJSONObject(i);
+                    JSONArray data = item.optJSONArray("data");
 
-                        String title = dataJ.optString("title", "NA");
-                        String dateCreated = dataJ.optString("date_created", "NA");
-                        String description = dataJ.optString("description", "NA");
-                        String nasa_id = dataJ.getString("nasa_id");
+                    if (data != null && data.length() > 0) {
+                        JSONObject dataTemp = data.getJSONObject(0);
+
+                        String title = dataTemp.optString("title", "NA");
+                        String dateCreated = dataTemp.optString("date_created", "NA");
+                        String description = dataTemp.optString("description", "NA");
+                        String nasa_id = dataTemp.getString("nasa_id");
                         itemNASA.setTitle(title);
                         itemNASA.setDateCreated(dateCreated);
                         itemNASA.setDescription(description);
                         itemNASA.setNasaID(nasa_id);
+                    } else {
+                        continue;
                     }
 
                     JSONArray links = item.optJSONArray("links");
                     if (links != null && links.length() > 0) {
-                        JSONObject temp = links.getJSONObject(0);
-                        String thumb = temp.getString("href");
-                        Log.d(TAG, "onPostExecute: guo thumb=" + thumb);
-                        String render = temp.optString("render", ""); // image
+                        JSONObject linkTemp = links.getJSONObject(0);
+                        String thumb = linkTemp.getString("href");
                         itemNASA.setThumbLink(thumb);
 //                        new MainActivity.ImageThumbRequest().execute(thumb);
-
-//                        for (SearchResultListener listener: listeners) {
-//                            listener.onDataAdded("", null);
-//                        }
                     } else {
                         itemNASA.setThumbLink("NA");
+                    }
+                    for (SearchResultListener listener: listeners) { // Notify listeners
+                        listener.onDataAdded("", itemNASA);
                     }
                     dataset.add(itemNASA);
                 }
 
-                Log.d(TAG, "onPostExecute: guo list=" + listeners.size());
-
                 for (SearchResultListener listener: listeners) {
-                    Log.d(TAG, "onPostExecute: guo on data returned");
                     listener.onDataReturned(dataset);
                 }
             } catch (JSONException e) {

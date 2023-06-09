@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements SearchResultListe
             @Override
             public boolean onQueryTextSubmit(String s) {
                 Log.d(TAG, "onQueryTextSubmit: " + s);
+                clearDataset();
                 beginTextSearch(s);
                 return false;
             }
@@ -96,18 +97,18 @@ public class MainActivity extends AppCompatActivity implements SearchResultListe
     private void initListView() {
         contentList = findViewById(R.id.content_list);
 
-        adapter = new ItemNASAAdapter(getApplicationContext(), R.layout.item_cell, dummyList);
+        adapter = new ItemNASAAdapter(getApplicationContext(), R.layout.item_cell, dataset);
         contentList.setAdapter(adapter);
 
         // set up on item click listener callback
         contentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.d(TAG, "onItemClick: position=" + i);
-                ItemNASA selected = (ItemNASA) contentList.getItemAtPosition(i);
-                Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
-                intent.putExtra("id", selected.getId());
-                startActivity(intent);
+                Log.d(TAG, "onItemClick: guo position=" + i);
+//                ItemNASA selected = (ItemNASA) contentList.getItemAtPosition(i);
+//                Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
+//                intent.putExtra("id", selected.getId());
+//                startActivity(intent);
             }
         });
     }
@@ -125,23 +126,27 @@ public class MainActivity extends AppCompatActivity implements SearchResultListe
         adapter.notifyDataSetChanged();
     }
 
-    private List<ItemNASA> dataset = new ArrayList<>();
+    private final ArrayList<ItemNASA> dataset = new ArrayList<>();
 
     @Override
     public void onDataAdded(String id, ItemNASA item) {
-
+//        dataset.add(item);
+//        adapter.notifyDataSetChanged();
     }
 
     @Override
     public void onDataReturned(List<ItemNASA> dataset) {
-        Log.d(TAG, "onDataReturned: guo dataset=" + dataset.size());
-        for (int i = 0; i < dataset.size(); i++) {
-            Log.d(TAG, "onDataReturned: guo i=" + i + " " + dataset.get(i));
-        }
+        this.dataset.addAll(dataset);
+        adapter.notifyDataSetChanged();
+//        Log.d(TAG, "onDataReturned: guo dataset=" + dataset.size());
+//        for (int i = 0; i < dataset.size(); i++) {
+//            Log.d(TAG, "onDataReturned: guo i=" + i + " " + dataset.get(i));
+//        }
     }
 
     public void clearDataset() {
         dataset.clear();
+        adapter.notifyDataSetChanged();
     }
 
     public ItemNASA getImageAtID(String id) {
