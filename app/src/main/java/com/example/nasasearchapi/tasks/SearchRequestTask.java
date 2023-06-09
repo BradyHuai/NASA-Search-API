@@ -2,6 +2,7 @@ package com.example.nasasearchapi.tasks;
 
 import static com.example.nasasearchapi.tools.Constants.API_ROOT;
 import static com.example.nasasearchapi.tools.Constants.SEARCH_ENDPOINT;
+import static com.example.nasasearchapi.tools.Constants.SEARCH_TYPE;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -41,7 +42,7 @@ public class SearchRequestTask extends AsyncTask<String, Void, String> {
         String result = null;
 
         try {
-            URL url = new URL(API_ROOT + SEARCH_ENDPOINT + "?q=" + q);
+            URL url = new URL(API_ROOT + SEARCH_ENDPOINT + "?q=" + q + SEARCH_TYPE);
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             StringBuilder stringBuilder = new StringBuilder();

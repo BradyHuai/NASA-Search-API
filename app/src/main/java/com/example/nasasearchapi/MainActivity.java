@@ -137,9 +137,6 @@ public class MainActivity extends AppCompatActivity implements SearchResultListe
         Log.d(TAG, "onDataReturned: guo dataset=" + dataset.size());
         for (int i = 0; i < dataset.size(); i++) {
             Log.d(TAG, "onDataReturned: guo i=" + i + " " + dataset.get(i));
-            if (dataset.get(i).getThumbLink().equals("NA")) {
-                Log.d(TAG, "onDataReturned: brady " + dataset.get(i).getNasaID());
-            }
         }
     }
 

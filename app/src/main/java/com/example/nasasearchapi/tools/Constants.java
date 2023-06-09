@@ -5,4 +5,6 @@ public class Constants {
     public static final String SEARCH_ENDPOINT = "/search";
     public static final String ASSET_ENDPOINT = "/asset";
 
+    public static final String SEARCH_TYPE = "&media_type=image";
+
 }
