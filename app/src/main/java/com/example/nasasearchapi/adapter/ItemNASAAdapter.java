@@ -33,7 +33,7 @@ public class ItemNASAAdapter extends ArrayAdapter<ItemNASA> {
         }
 
         TextView itemTitle = convertView.findViewById(R.id.item_title);
-        ImageView itemImage = convertView.findViewById(R.id.item_image); // TODO get image
+        ImageView itemImage = convertView.findViewById(R.id.item_image);
 
         // Update content cell information
         itemTitle.setText(itemNASA.getTitle());

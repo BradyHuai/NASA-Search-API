@@ -2,7 +2,9 @@ package com.example.nasasearchapi.data;
 
 import android.graphics.Bitmap;
 
-public class ItemNASA {
+import java.io.Serializable;
+
+public class ItemNASA implements Serializable {
 
     private int id;
     private String title;

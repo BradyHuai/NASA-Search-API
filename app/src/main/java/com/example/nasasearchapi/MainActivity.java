@@ -17,8 +17,6 @@ import com.example.nasasearchapi.adapter.ItemNASAAdapter;
 import com.example.nasasearchapi.data.ItemNASA;
 import com.example.nasasearchapi.eventListener.SearchResultListener;
 import com.example.nasasearchapi.tasks.SearchRequestTask;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -108,11 +106,10 @@ public class MainActivity extends AppCompatActivity implements SearchResultListe
         contentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.d(TAG, "onItemClick: guo position=" + i);
-//                ItemNASA selected = (ItemNASA) contentList.getItemAtPosition(i);
-//                Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
-//                intent.putExtra("id", selected.getId());
-//                startActivity(intent);
+                ItemNASA selected = (ItemNASA) contentList.getItemAtPosition(i);
+                Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
+                intent.putExtra("NASA", selected);
+                startActivity(intent);
             }
         });
     }
@@ -131,26 +128,24 @@ public class MainActivity extends AppCompatActivity implements SearchResultListe
     }
 
     private final ArrayList<ItemNASA> dataset = new ArrayList<>();
+    private final HashMap<String, ItemNASA> dataMap = new HashMap<>();
 
     @Override
     public void onDataAdded(String id, ItemNASA item) {
         dataset.add(item);
-        adapter.notifyDataSetChanged();
+        dataMap.put(item.getNasaID(), item);
+        notifyDataSetChanged();
     }
 
     @Override
     public void onDataReturned(List<ItemNASA> dataset) {
 //        this.dataset.addAll(dataset);
 //        adapter.notifyDataSetChanged();
-//        Log.d(TAG, "onDataReturned: guo dataset=" + dataset.size());
-//        for (int i = 0; i < dataset.size(); i++) {
-//            Log.d(TAG, "onDataReturned: guo i=" + i + " " + dataset.get(i));
-//        }
     }
 
     public void clearDataset() {
         dataset.clear();
-        adapter.notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     public ItemNASA getImageAtID(String id) {

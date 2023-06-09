@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.nasasearchapi.data.ItemNASA;
+import com.squareup.picasso.Picasso;
 
 public class DetailsActivity extends AppCompatActivity {
 
@@ -21,7 +22,6 @@ public class DetailsActivity extends AppCompatActivity {
     TextView description;
     TextView dateCreated;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,9 +30,7 @@ public class DetailsActivity extends AppCompatActivity {
         initUIComponents();
 
         Intent intent = getIntent();
-        int itemId = intent.getIntExtra("id", 0);
-        Log.d(TAG, "onCreate: item id=" + itemId);
-        currentItem = MainActivity.dummyList.get(itemId);
+        currentItem = (ItemNASA) intent.getSerializableExtra("NASA");
 
         updateData();
     }
@@ -48,5 +46,7 @@ public class DetailsActivity extends AppCompatActivity {
         title.setText(currentItem.getTitle());
         description.setText(currentItem.getDescription());
         dateCreated.setText(currentItem.getDateCreated());
+
+        Picasso.get().load(currentItem.getThumbLink()).into(image);
     }
 }
