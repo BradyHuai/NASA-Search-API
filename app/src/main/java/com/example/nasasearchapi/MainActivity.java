@@ -3,6 +3,8 @@ package com.example.nasasearchapi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +17,8 @@ import com.example.nasasearchapi.adapter.ItemNASAAdapter;
 import com.example.nasasearchapi.data.ItemNASA;
 import com.example.nasasearchapi.eventListener.SearchResultListener;
 import com.example.nasasearchapi.tasks.SearchRequestTask;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -130,14 +134,14 @@ public class MainActivity extends AppCompatActivity implements SearchResultListe
 
     @Override
     public void onDataAdded(String id, ItemNASA item) {
-//        dataset.add(item);
-//        adapter.notifyDataSetChanged();
+        dataset.add(item);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
     public void onDataReturned(List<ItemNASA> dataset) {
-        this.dataset.addAll(dataset);
-        adapter.notifyDataSetChanged();
+//        this.dataset.addAll(dataset);
+//        adapter.notifyDataSetChanged();
 //        Log.d(TAG, "onDataReturned: guo dataset=" + dataset.size());
 //        for (int i = 0; i < dataset.size(); i++) {
 //            Log.d(TAG, "onDataReturned: guo i=" + i + " " + dataset.get(i));

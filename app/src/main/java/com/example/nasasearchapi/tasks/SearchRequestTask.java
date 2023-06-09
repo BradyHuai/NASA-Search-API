@@ -109,7 +109,6 @@ public class SearchRequestTask extends AsyncTask<String, Void, String> {
                         JSONObject linkTemp = links.getJSONObject(0);
                         String thumb = linkTemp.getString("href");
                         itemNASA.setThumbLink(thumb);
-//                        new MainActivity.ImageThumbRequest().execute(thumb);
                     } else {
                         itemNASA.setThumbLink("NA");
                     }

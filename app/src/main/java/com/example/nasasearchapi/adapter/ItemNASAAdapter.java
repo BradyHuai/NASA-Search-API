@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 
 import com.example.nasasearchapi.R;
 import com.example.nasasearchapi.data.ItemNASA;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -36,7 +37,9 @@ public class ItemNASAAdapter extends ArrayAdapter<ItemNASA> {
 
         // Update content cell information
         itemTitle.setText(itemNASA.getTitle());
-//        itemImage.setImageResource();
+
+        Picasso.get().load(itemNASA.getThumbLink()).into(itemImage);
+//        itemImage.setImageBitmap(itemNASA.getThumbImage());
 
         return convertView;
     }
