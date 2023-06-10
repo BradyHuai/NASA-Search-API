@@ -26,13 +26,11 @@ public class SearchRequestTask extends AsyncTask<String, Void, String> {
 
     private static final String TAG = SearchRequestTask.class.getSimpleName();
 
-    private List<SearchResultListener> listeners = new ArrayList<>();
+    private final List<SearchResultListener> listeners = new ArrayList<>();
 
     public void addListener(SearchResultListener listener) {
         this.listeners.add(listener);
     }
-
-    private List<ItemNASA> dataset = new ArrayList<>();
 
     @Override
     protected String doInBackground(String... strings) {
@@ -115,19 +113,10 @@ public class SearchRequestTask extends AsyncTask<String, Void, String> {
                     for (SearchResultListener listener: listeners) { // Notify listeners
                         listener.onDataAdded("", itemNASA);
                     }
-                    dataset.add(itemNASA);
-                }
-
-                for (SearchResultListener listener: listeners) {
-                    listener.onDataReturned(dataset);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-    }
-
-    public List<ItemNASA> getDataset() {
-        return dataset;
     }
 }

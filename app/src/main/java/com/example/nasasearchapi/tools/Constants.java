@@ -7,4 +7,7 @@ public class Constants {
 
     public static final String SEARCH_TYPE = "&media_type=image";
 
+    public static final String INTENT_SELECTED = "selected";
+
+    public static final String STRING_NA = "NA";
 }

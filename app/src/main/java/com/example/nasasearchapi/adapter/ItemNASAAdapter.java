@@ -39,7 +39,6 @@ public class ItemNASAAdapter extends ArrayAdapter<ItemNASA> {
         itemTitle.setText(itemNASA.getTitle());
 
         Picasso.get().load(itemNASA.getThumbLink()).into(itemImage);
-//        itemImage.setImageBitmap(itemNASA.getThumbImage());
 
         return convertView;
     }

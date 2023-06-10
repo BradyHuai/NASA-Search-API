@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.nasasearchapi.data.ItemNASA;
+import com.example.nasasearchapi.tools.Constants;
 import com.squareup.picasso.Picasso;
 
 public class DetailsActivity extends AppCompatActivity {
@@ -30,7 +31,12 @@ public class DetailsActivity extends AppCompatActivity {
         initUIComponents();
 
         Intent intent = getIntent();
-        currentItem = (ItemNASA) intent.getSerializableExtra("NASA");
+        currentItem = (ItemNASA) intent.getSerializableExtra(Constants.INTENT_SELECTED);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
 
         updateData();
     }
