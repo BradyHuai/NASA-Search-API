@@ -32,6 +32,13 @@ public class SearchRequestTask extends AsyncTask<String, Void, String> {
         this.listeners.add(listener);
     }
 
+    /**
+     * Makes connection to the NASA Image API and reads the search results
+     * for selected query
+     *
+     * @param strings query
+     * @return search results
+     */
     @Override
     protected String doInBackground(String... strings) {
         String q = strings[0];
@@ -71,6 +78,11 @@ public class SearchRequestTask extends AsyncTask<String, Void, String> {
         return result;
     }
 
+    /**
+     * Parse the search results to ItemNASA object and return to MainActivity
+     *
+     * @param s search result
+     */
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);

@@ -6,12 +6,13 @@ import java.io.Serializable;
 
 public class ItemNASA implements Serializable {
 
-    private String title;
-    private String description;
-    private String dateCreated;
+    private String title; // Title of the NASA image
+    private String description; // Description of the NASA image
+    private String dateCreated; // the date when the NASA image is created
 
-    private String thumbLink;
-    private String nasaID;
+    private String thumbLink; // The thumb image link for the image,
+    // ex. https://images-assets.nasa.gov/image/EC97-44347-15/EC97-44347-15~thumb.jpg
+    private String nasaID; // The unique id for the image
 
     public ItemNASA() {
         this.title = Constants.STRING_NA;

@@ -72,6 +72,9 @@ public class MainActivity extends AppCompatActivity implements SearchResultListe
         initListView();
     }
 
+    /**
+     * Set up Search view in MainActivity for entering search query
+     */
     private void initSearchView() {
         searchView = findViewById(R.id.search_view);
 
@@ -94,6 +97,9 @@ public class MainActivity extends AppCompatActivity implements SearchResultListe
         searchView.setEnabled(true);
     }
 
+    /**
+     * Set up list view in MainActivity which list out the search results
+     */
     private void initListView() {
         contentList = findViewById(R.id.content_list);
 
@@ -109,6 +115,10 @@ public class MainActivity extends AppCompatActivity implements SearchResultListe
         });
     }
 
+    /**
+     * Starts DetailsActivity
+     * @param position position of the selected item in the list view
+     */
     private void startDetailsActivity(int position) {
         ItemNASA selected = (ItemNASA) contentList.getItemAtPosition(position);
         Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
@@ -116,6 +126,10 @@ public class MainActivity extends AppCompatActivity implements SearchResultListe
         startActivity(intent);
     }
 
+    /**
+     * Perform search task on entered string
+     * @param s query
+     */
     private void beginTextSearch(String s) {
         if (searchTask != null && searchTask.getStatus() == AsyncTask.Status.RUNNING) {
             searchTask.cancel(true);

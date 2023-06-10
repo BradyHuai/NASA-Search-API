@@ -41,6 +41,9 @@ public class DetailsActivity extends AppCompatActivity {
         updateData();
     }
 
+    /**
+     * Set up UI components, title, image, description, date created
+     */
     private void initUIComponents() {
         title = findViewById(R.id.details_title);
         description = findViewById(R.id.details_description);
@@ -48,6 +51,9 @@ public class DetailsActivity extends AppCompatActivity {
         image = findViewById(R.id.details_Image);
     }
 
+    /**
+     * Update the UI components to be the selected item, and load image
+     */
     private void updateData() {
         title.setText(currentItem.getTitle());
         description.setText(currentItem.getDescription());
