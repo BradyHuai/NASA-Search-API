@@ -40,16 +40,6 @@ public class MainActivity extends AppCompatActivity implements SearchResultListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button b = findViewById(R.id.buttonss);
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "onClick: guo ");
-                clearDataset();
-                beginTextSearch("Moon");
-            }
-        });
-
         initUIComponents();
     }
 
