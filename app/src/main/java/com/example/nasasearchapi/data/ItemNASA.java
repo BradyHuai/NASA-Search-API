@@ -1,5 +1,7 @@
 package com.example.nasasearchapi.data;
 
+import androidx.annotation.NonNull;
+
 import com.example.nasasearchapi.tools.Constants;
 
 import java.io.Serializable;
@@ -62,6 +64,7 @@ public class ItemNASA implements Serializable {
         this.nasaID = nasaID;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "ItemNASA{" +
