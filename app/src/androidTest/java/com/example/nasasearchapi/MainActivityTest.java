@@ -1,36 +1,24 @@
 package com.example.nasasearchapi;
 
-import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.anything;
+import static org.hamcrest.CoreMatchers.containsString;
 
-import androidx.test.espresso.Espresso;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
-import androidx.test.espresso.ViewAssertion;
-import androidx.test.espresso.action.ViewActions;
-import androidx.test.espresso.assertion.ViewAssertions;
-import androidx.test.espresso.idling.CountingIdlingResource;
-import androidx.test.espresso.matcher.ViewMatchers;
+import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.clearText;
-import static androidx.test.espresso.action.ViewActions.pressImeActionButton;
-import static androidx.test.espresso.action.ViewActions.pressKey;
-import static androidx.test.espresso.action.ViewActions.typeText;
-import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.*;
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.view.KeyEvent;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
 
@@ -50,41 +38,99 @@ import java.util.ArrayList;
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
 
-    private CountingIdlingResource idlingResource = new CountingIdlingResource("SearchRequestTask");
-
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
 
     @Before
-    public void setUp() throws Exception {
-//        Espresso.registerIdlingResources(idlingResource);
-    }
+    public void setUp() throws Exception {}
 
     @After
-    public void tearDown() throws Exception {
-//        Espresso.unregisterIdlingResources(idlingResource);
+    public void tearDown() throws Exception {}
+
+    public static ViewAction typeSearchViewText(final String text){
+        return new ViewAction(){
+            @Override
+            public Matcher<View> getConstraints() {
+                return allOf(isDisplayed(), isAssignableFrom(SearchView.class));
+            }
+
+            @Override
+            public String getDescription() {
+                return "Change view text";
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                ((SearchView) view).setQuery(text,true);
+            }
+        };
     }
 
     @Test
-    public void testSearchViewInput() throws InterruptedException {
-        // Type a search query in the SearchView
-//        onView(withId(R.id.search_view)).check(matches(isCompletelyDisplayed()));
-//        onView(withId(R.id.search_view)).perform(typeText("Moon"));
-//
-//        // Click the submit button on the keyboard
-//        onView(withId(R.id.search_view)).perform(pressKey(KeyEvent.KEYCODE_ENTER));
+    public void testSearchViewInput() {
+        onView(withId(R.id.search_view)).check(matches(isCompletelyDisplayed()));
 
-        // Verify that the ListView is displayed
-        onView(withId(R.id.content_list)).check(matches(isClickable()));
-        onView(withId(R.id.content_list)).check(matches(isEnabled()));
+        onView(withId(R.id.search_view)).perform(typeSearchViewText("Moon"));
 
-//        Espresso.onData(ViewMatchers.withId(R.id.content_list))
-//                .atPosition(0)
-//                .check(matches(isClickable()));
-
-//        // Verify that the ListView has at least one item
+        // Verify that the ListView has at least one item
         onView(withId(R.id.content_list)).check(matches(hasMinimumChildCount(1)));
+    }
+
+    @Test
+    public void testSearchViewInputEmpty() {
+        onView(withId(R.id.search_view)).check(matches(isCompletelyDisplayed()));
+
+        onView(withId(R.id.search_view)).perform(typeSearchViewText(""));
+
+        // Verify that the ListView has no item
+        onView(withId(R.id.content_list)).check(matches(hasChildCount(0)));
+    }
+
+    @Test
+    public void testSearchViewContinuousInput() {
+        onView(withId(R.id.search_view)).check(matches(isCompletelyDisplayed()));
+
+        onView(withId(R.id.search_view)).perform(typeSearchViewText("Moon"));
+
+        // Verify that the ListView has at least one item
+        onView(withId(R.id.content_list)).check(matches(hasMinimumChildCount(1)));
+
+        onView(withId(R.id.search_view)).perform(typeSearchViewText("Earth"));
+
+        // Verify that the ListView has at least one item
+        onView(withId(R.id.content_list)).check(matches(hasMinimumChildCount(1)));
+    }
+
+    @Test
+    public void testSearchViewInvalidInput() {
+        onView(withId(R.id.search_view)).check(matches(isCompletelyDisplayed()));
+
+        onView(withId(R.id.search_view)).perform(typeSearchViewText("doesnotexist"));
+
+        // Verify that the ListView has at least one item
+        onView(withId(R.id.content_list)).check(matches(hasChildCount(0)));
+    }
+
+    @Test
+    public void testListViewCountEmpty() {
+        InstrumentationRegistry.getInstrumentation().runOnMainSync(new Runnable() {
+            @Override
+            public void run() {
+                ListView listView = mActivityRule.getActivity().findViewById(R.id.content_list);
+
+                // Perform UI operations on the main thread
+                // Add items to the ListView
+                ArrayList<ItemNASA> dataset = new ArrayList<>();
+                ItemNASAAdapter adapter = new ItemNASAAdapter(getApplicationContext(), R.layout.item_cell, dataset);
+                listView.setAdapter(adapter);
+
+                // Notify the adapter that the data has changed
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        onView(withId(R.id.content_list)).check(matches(hasChildCount(0)));
     }
 
     @Test
@@ -98,6 +144,8 @@ public class MainActivityTest {
                 // Add items to the ListView
                 ArrayList<ItemNASA> dataset = new ArrayList<>();
                 dataset.add(new ItemNASA());
+                dataset.add(new ItemNASA());
+                dataset.add(new ItemNASA());
                 ItemNASAAdapter adapter = new ItemNASAAdapter(getApplicationContext(), R.layout.item_cell, dataset);
                 listView.setAdapter(adapter);
 
@@ -106,14 +154,18 @@ public class MainActivityTest {
             }
         });
 
-        // Continue with your test assertions and verifications
-        onView(withId(R.id.content_list)).check(matches(hasChildCount(1)));
+        onView(withId(R.id.content_list)).check(matches(hasChildCount(3)));
     }
 
-    public static boolean isConnected(Context context) {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    @Test
+    public void testShouldShowItemDetailWhenClicked() {
+        onView(withId(R.id.search_view)).check(matches(isCompletelyDisplayed()));
+        onView(withId(R.id.search_view)).perform(typeSearchViewText("Moon"));
+
+        Intents.init();
+        onData(anything()).inAdapterView(withId(R.id.content_list)).atPosition(0).perform(click());
+        Intents.release();
+
+        onView(withId(R.id.details_title)).check(matches(withText(containsString("Moon"))));
     }
 }
