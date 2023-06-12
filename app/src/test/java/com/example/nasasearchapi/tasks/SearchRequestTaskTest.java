@@ -3,29 +3,15 @@ package com.example.nasasearchapi.tasks;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import java.net.HttpURLConnection;
-import java.util.List;
-
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-import android.app.Activity;
-import android.content.ClipData;
-
-import androidx.test.rule.ActivityTestRule;
-
-import com.example.nasasearchapi.MainActivity;
 import com.example.nasasearchapi.data.ItemNASA;
 import com.example.nasasearchapi.eventListener.SearchResultListener;
 
@@ -58,7 +44,7 @@ public class SearchRequestTaskTest {
     }
 
     @Test
-    public void testDoInBackground_IOException() throws Exception {
+    public void testDoInBackgroundIOException() throws Exception {
         // TODO
 //        SearchRequestTask task = new SearchRequestTask();
 //
@@ -79,7 +65,7 @@ public class SearchRequestTaskTest {
     }
 
     @Test
-    public void testOnPostExecute_WithNonNullInput() {
+    public void testOnPostExecuteWithNonNullInput() {
         // Mock the necessary dependencies and inputs
         String input = "{\"collection\":{\"items\":[{\"data\":[{\"title\":\"Moon\",\"date_created\":\"2023-06-10\",\"description\":\"This is Moon\",\"nasa_id\":\"12345\"}],\"links\":[{\"href\":\"https://example.com/image.jpg\"}]}]}}";
         ItemNASA expected = new ItemNASA();
@@ -107,7 +93,7 @@ public class SearchRequestTaskTest {
     }
 
     @Test
-    public void testOnPostExecute_WithNullInput() {
+    public void testOnPostExecuteWithNullInput() {
         // Mock the necessary dependencies and inputs
         String input = "{\"collection\":{\"items\":[{\"data\":[{\"title\":\"Moon\",\"date_created\":\"2023-06-10\",\"description\":\"This is Moon\",\"nasa_id\":\"12345\"}]}]}}";
         ItemNASA expected = new ItemNASA();

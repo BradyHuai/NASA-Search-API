@@ -1,6 +1,5 @@
 package com.example.nasasearchapi.adapter;
 
-import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertEquals;
@@ -10,7 +9,6 @@ import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasChildCount;
-import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -19,19 +17,14 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.nasasearchapi.MainActivityTest.typeSearchViewText;
 
 import android.app.Activity;
-import android.view.View;
 import android.widget.ListView;
-import android.widget.SearchView;
 
-import androidx.test.espresso.UiController;
-import androidx.test.espresso.ViewAction;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 import com.example.nasasearchapi.MainActivity;
 import com.example.nasasearchapi.R;
 import com.example.nasasearchapi.data.ItemNASA;
 
-import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;

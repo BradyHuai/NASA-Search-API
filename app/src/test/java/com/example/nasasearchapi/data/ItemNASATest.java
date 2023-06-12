@@ -21,35 +21,35 @@ public class ItemNASATest {
     }
 
     @Test
-    public void getTitle() {
+    public void testGetTitle() {
         itemNASA.setTitle("Moon");
         String result = itemNASA.getTitle();
         assertEquals("Moon", result);
     }
 
     @Test
-    public void getDescription() {
+    public void testGetDescription() {
         itemNASA.setDescription("This is an image of a Moon");
         String result = itemNASA.getDescription();
         assertEquals("This is an image of a Moon", result);
     }
 
     @Test
-    public void getDateCreated() {
+    public void testGetDateCreated() {
         itemNASA.setDateCreated("2020-09-10");
         String result = itemNASA.getDateCreated();
         assertEquals("2020-09-10", result);
     }
 
     @Test
-    public void getThumbLink() {
+    public void testGetThumbLink() {
         itemNASA.setThumbLink("https://images-assets.nasa.gov/image/EC97-44347-15/EC97-44347-15~thumb.jpg");
         String result = itemNASA.getThumbLink();
         assertEquals("https://images-assets.nasa.gov/image/EC97-44347-15/EC97-44347-15~thumb.jpg", result);
     }
 
     @Test
-    public void getNasaID() {
+    public void testGetNasaID() {
         itemNASA.setNasaID("EC97-44347-15");
         String result = itemNASA.getNasaID();
         assertEquals("EC97-44347-15", result);
