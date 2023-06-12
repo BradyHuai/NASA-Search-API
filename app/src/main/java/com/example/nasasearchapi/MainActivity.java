@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.example.nasasearchapi.adapter.ItemNASAAdapter;
 import com.example.nasasearchapi.data.ItemNASA;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements SearchResultListe
     // UI Components
     SearchView searchView;
     ListView contentList;
+    TextView intro;
 
     // Data
     private final ArrayList<ItemNASA> dataset = new ArrayList<>();
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements SearchResultListe
     private void initUIComponents(){
         initSearchView();
         initListView();
+        intro = findViewById(R.id.intro);
     }
 
     /**
@@ -91,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements SearchResultListe
             @Override
             public boolean onQueryTextChange(String s) {
                 Log.d(TAG, "onQueryTextChange: " + s);
+                intro.setVisibility(View.INVISIBLE);
                 return false;
             }
         });

@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">NASA Search API</string>
 
-    <string name="search">Search</string>
+    <string name="search">Search here</string>
     <string name="date_created">Date Created:</string>
     <string name="description">Description:</string>
+    <string name="intro_message">This is the NASA Image search API. \nInput query in the above search bar.</string>
 </resources>
