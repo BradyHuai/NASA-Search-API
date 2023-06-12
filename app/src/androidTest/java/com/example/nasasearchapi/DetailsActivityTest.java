@@ -45,6 +45,11 @@ public class DetailsActivityTest {
     @Test
     public void testDisplayImage() {
         // Check if the image is displayed
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         onView(withId(R.id.details_Image)).check(matches(isDisplayed()));
     }
 }
