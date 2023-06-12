@@ -1,105 +1,141 @@
 package com.example.nasasearchapi.tasks;
 
-import com.example.nasasearchapi.data.ItemNASA;
-import com.example.nasasearchapi.eventListener.SearchResultListener;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import static org.junit.Assert.*;
+
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.MockitoAnnotations;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-@RunWith(MockitoJUnitRunner.class)
+import android.app.Activity;
+import android.content.ClipData;
+
+import androidx.test.rule.ActivityTestRule;
+
+import com.example.nasasearchapi.MainActivity;
+import com.example.nasasearchapi.data.ItemNASA;
+import com.example.nasasearchapi.eventListener.SearchResultListener;
+
+@RunWith(RobolectricTestRunner.class)
+@Config(manifest = Config.NONE)
 public class SearchRequestTaskTest {
-
-    @Mock
-    private HttpURLConnection mockConnection;
-
-    @Mock
-    private BufferedReader mockReader;
-
-    @Mock
-    private SearchResultListener mockListener;
-
-    private SearchRequestTask searchRequestTask;
-
     @Before
     public void setup() {
-        searchRequestTask = new SearchRequestTask();
-        searchRequestTask.addListener(mockListener);
     }
 
     @Test
-    public void doInBackground_shouldReturnSearchResult() throws IOException {
-        String expectedResult = "{\"collection\":{\"items\":[]}}";
+    public void testDoInBackgroundSuccess() throws Exception {
+        SearchRequestTask task = new SearchRequestTask();
 
-        // Mock the connection and reader
-        when(mockConnection.getInputStream()).thenReturn(getMockInputStream(expectedResult));
-        when(mockReader.readLine()).thenReturn(expectedResult, null);
-        when(mockConnection.getResponseCode()).thenReturn(HttpURLConnection.HTTP_OK);
+        String result = task.doInBackground("Earth");
 
-        // Mock the URL and connection
-        URL mockUrl = Mockito.mock(URL.class);
-        when(mockUrl.openConnection()).thenReturn(mockConnection);
-
-        // Set the mocked URL in the searchRequestTask
-        SearchRequestTask taskSpy = spy(searchRequestTask);
-        doReturn(mockUrl).when(taskSpy).execute(any(String.class));
-
-        // Invoke the doInBackground method
-        String result = taskSpy.doInBackground("query");
-
-        // Verify the expected result
-        assertEquals(expectedResult, result);
+        assertTrue(result.contains("collection"));
+        assertTrue(result.contains("items"));
     }
 
     @Test
-    public void onPostExecute_shouldNotifyListenersWithDataAdded() throws JSONException {
-        String searchResult = "{\"collection\":{\"items\":[" +
-                "{\"data\":[{\"title\":\"Title\",\"date_created\":\"2023-01-01\",\"description\":\"Description\",\"nasa_id\":\"123\"}],\"links\":[{\"href\":\"thumbnail_link\"}]}," +
-                "{\"data\":[{\"title\":\"Title2\",\"date_created\":\"2023-01-02\",\"description\":\"Description2\",\"nasa_id\":\"456\"}]}]}}";
+    public void testDoInBackgroundFail() throws Exception {
+        SearchRequestTask task = new SearchRequestTask();
 
-        // Invoke the onPostExecute method
-        searchRequestTask.onPostExecute(searchResult);
+        String result = task.doInBackground("doesnotexist");
 
-        // Verify that the onDataAdded method of the listener is called with the expected ItemNASA objects
-        ItemNASA expectedItem1 = new ItemNASA();
-        expectedItem1.setTitle("Title");
-        expectedItem1.setDateCreated("2023-01-01");
-        expectedItem1.setDescription("Description");
-        expectedItem1.setNasaID("123");
-        expectedItem1.setThumbLink("thumbnail_link");
-
-        ItemNASA expectedItem2 = new ItemNASA();
-        expectedItem2.setTitle("Title2");
-        expectedItem2.setDateCreated("2023-01-02");
-        expectedItem2.setDescription("Description2");
-        expectedItem2.setNasaID("456");
-        expectedItem2.setThumbLink("NA");
-
-        verify(mockListener, times(2)).onDataAdded("", expectedItem1);
-        verify(mockListener, times(1)).onDataAdded("", expectedItem2);
+        assertTrue(result.contains("collection"));
+        assertTrue(result.contains("items"));
+        assertTrue(result.contains("\"total_hits\":0"));
     }
 
-    // Helper method to mock an InputStream with a given string
-    private InputStream getMockInputStream(String content) {
-        return new ByteArrayInputStream(content.getBytes());
+    @Test
+    public void testDoInBackground_IOException() throws Exception {
+        // TODO
+//        SearchRequestTask task = new SearchRequestTask();
+//
+//        // ProtocolException
+//        // MalformedURLException
+//        // IOException
+//
+//        // new URL
+//        // url.openConnection();
+//        // reader.readLine()
+//        // connection.getInputStream()
+////        connection.setRequestMethod("GET");
+//
+//        URL mockUrl = PowerMockito.mock(URL.class);
+//        doThrow(new IOException("error")).when(mockUrl).openConnection().getInputStream();
+//        String result = task.doInBackground("");
+//        assertNull(result);
+    }
+
+    @Test
+    public void testOnPostExecute_WithNonNullInput() {
+        // Mock the necessary dependencies and inputs
+        String input = "{\"collection\":{\"items\":[{\"data\":[{\"title\":\"Moon\",\"date_created\":\"2023-06-10\",\"description\":\"This is Moon\",\"nasa_id\":\"12345\"}],\"links\":[{\"href\":\"https://example.com/image.jpg\"}]}]}}";
+        ItemNASA expected = new ItemNASA();
+        expected.setNasaID("12345");
+        expected.setTitle("Moon");
+        expected.setDescription("This is Moon");
+        expected.setDateCreated("2023-06-10");
+        expected.setThumbLink("https://example.com/image.jpg");
+
+        // Create a mock SearchResultListener
+        SearchResultListener listenerMock = Mockito.mock(SearchResultListener.class);
+
+        // Create an instance of SearchRequestTask
+        SearchRequestTask searchTask = new SearchRequestTask();
+        searchTask.addListener(listenerMock);
+
+        // Simulate the execution of the AsyncTask and trigger the onPostExecute method
+        searchTask.onPostExecute(input);
+
+        // Verify that the onDataAdded method is called on the MainActivity with the expected parameters
+        verify(listenerMock).onDataAdded("", expected);
+
+        // Verify that no other methods on the listener were called
+        verifyNoMoreInteractions(listenerMock);
+    }
+
+    @Test
+    public void testOnPostExecute_WithNullInput() {
+        // Mock the necessary dependencies and inputs
+        String input = "{\"collection\":{\"items\":[{\"data\":[{\"title\":\"Moon\",\"date_created\":\"2023-06-10\",\"description\":\"This is Moon\",\"nasa_id\":\"12345\"}]}]}}";
+        ItemNASA expected = new ItemNASA();
+        expected.setNasaID("12345");
+        expected.setTitle("Moon");
+        expected.setDescription("This is Moon");
+        expected.setDateCreated("2023-06-10");
+        expected.setThumbLink("NA");
+
+        // Create a mock SearchResultListener
+        SearchResultListener listenerMock = Mockito.mock(SearchResultListener.class);
+
+        // Create an instance of SearchRequestTask
+        SearchRequestTask searchTask = new SearchRequestTask();
+        searchTask.addListener(listenerMock);
+
+        // Simulate the execution of the AsyncTask and trigger the onPostExecute method
+        searchTask.onPostExecute(input);
+
+        // Verify that the onDataAdded method is called on the MainActivity with the expected parameters
+        verify(listenerMock).onDataAdded("", expected);
+
+        // Verify that no other methods on the listener were called
+        verifyNoMoreInteractions(listenerMock);
+    }
+
+    @Test
+    public void testOnPostExecute_JSONException() {
+        //TODO
     }
 }

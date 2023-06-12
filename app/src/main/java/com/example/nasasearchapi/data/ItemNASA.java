@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.example.nasasearchapi.tools.Constants;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class ItemNASA implements Serializable {
 
@@ -74,5 +75,18 @@ public class ItemNASA implements Serializable {
                 ", thumbLink='" + thumbLink + '\'' +
                 ", nasaID='" + nasaID + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ItemNASA itemNASA = (ItemNASA) o;
+        return Objects.equals(title, itemNASA.title) && Objects.equals(description, itemNASA.description) && Objects.equals(dateCreated, itemNASA.dateCreated) && Objects.equals(thumbLink, itemNASA.thumbLink) && Objects.equals(nasaID, itemNASA.nasaID);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, description, dateCreated, thumbLink, nasaID);
     }
 }
