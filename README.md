@@ -38,23 +38,42 @@ The app follows the traditional Model View Controller design pattern, user inter
 - Android Studio IDE
 - Android SDK
 - Java Development Kit (JDK)
+- Android emulator or physical device
 
-### Steps:
-1. Clone the repository `git clone https://github.com/BradyHuai/NASA-Search-API.git`, or download it as zip file
-2. Open the project in Android Studio:
+### Option 1: APK file
+1. Download the application as zip file or clone the repository `git clone https://github.com/BradyHuai/NASA-Search-API.git`
+2. Open terminal and in the root folder type `cd NASASearchAPI`
+- If you are cloning the repository, make sure to checkout to branch `master` by typing `git checkout master`
+3. Connect to a physical device or launch Android emulator:
+- Connect to hardware device: https://developer.android.com/studio/run/device
+- Launch Android Studio and add virtual machine: https://developer.android.com/studio/run/managing-avds
+4. In terminal enter `cd demo` to navigate to APK file located at `NASASearchAPI/demo/app-demo.apk`
+5. Install the app:
+- In terminal, input `adb install app-demo.apk`
+- An app named `NASA Search API` should be installed in the device
+6. Click on the app and interact:
+- enter queries on the top search bar and browse through the NASA image results
+
+### Option 2: Build from Android Studio
+1. Download the application as zip file or clone the repository `git clone https://github.com/BradyHuai/NASA-Search-API.git`
+2. Open terminal and in the root folder type `cd NASASearchAPI`
+- If you are cloning the repository, make sure to checkout to branch `master` by typing `git checkout master`
+3. Open the project in Android Studio:
 - Launch Android studio
 - Click on `Open an existing Android Studio Project`
 - Navigate to the cloned project directory and select the root folder
-3. Build and run the app:
+4. Build and run the app:
+- Connect to hardware device: https://developer.android.com/studio/run/device OR
+- Launch Android Studio and add virtual machine: https://developer.android.com/studio/run/managing-avds
 - Select the desired target device or emulator from the toolbar.
 - Click `run` button to build and run the app.
-4. Interact with the app:
+5. Interact with the app:
 - enter queries on the top search bar and browse through the NASA image results
 
 Note: This app requires an internet connection to search for images and load image data from NASA's API.
 
 ## Demonstrations
-
+- images below can also be found at `NASASearchAPI/demo/`
 <img width="361" alt="Screenshot 1" src="https://github.com/BradyHuai/NASA-Search-API/assets/66107241/588b1be8-f369-4f5b-9732-a05e50466de8">
 <img width="365" alt="Screenshot 2" src="https://github.com/BradyHuai/NASA-Search-API/assets/66107241/eb4cd500-cfca-45cb-bb7f-f3651f3b8221">
 <img width="366" alt="Screenshot 3" src="https://github.com/BradyHuai/NASA-Search-API/assets/66107241/035cd816-7dd8-4dda-89d5-65867d856409">
